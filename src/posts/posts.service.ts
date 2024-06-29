@@ -19,7 +19,7 @@ export class PostsService {
   }
 
   async create(post: PostType): Promise<void> {
-    await this.prisma.posts.create({
+    const createdPost = await this.prisma.posts.create({
       data: post,
     });
   }

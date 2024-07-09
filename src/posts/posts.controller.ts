@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Request,Post } from '@nestjs/common';
 import { PostsService } from './posts.service';
-import { PostType } from './post.interface';
+import { CreatManyPostDataDto, PostType } from './post.interface';
 
 @Controller('posts')
 export class PostsController {
@@ -20,5 +20,11 @@ export class PostsController {
   async findById(@Param('id') id: string): Promise<PostType | null> {
     const postId = parseInt(id, 10);
     return await this.postsService.findById(postId);
+  }
+  @Post('/many')
+  async createMany(@Request() req, @Body() body: CreatManyPostDataDto) {
+    const postId = req.id
+    console.log("Received body: ", body);
+    return await this.postsService.createMany(postId, body.entries)
   }
 }

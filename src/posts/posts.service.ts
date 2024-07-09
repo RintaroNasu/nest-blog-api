@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { PostType } from './post.interface';
+import { CreatePostDataDto, PostType } from './post.interface';
 
 @Injectable()
 export class PostsService {
@@ -22,5 +22,17 @@ export class PostsService {
     const createdPost = await this.prisma.posts.create({
       data: post,
     });
+  }
+
+  async createMany(postId: string, data: CreatePostDataDto[]) {
+    try {
+      const dataWithPostId = data.map((entry) => ({ ...entry, postId }))
+      return await this.prisma.posts.createMany({
+        data: dataWithPostId,
+      })
+    } catch (e) {
+      console.error("Error in createMany: ", e);
+      throw e
+    }
   }
 }
